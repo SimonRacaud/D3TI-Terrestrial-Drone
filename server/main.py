@@ -1,7 +1,6 @@
 from fastapi import FastAPI
 
 from network.models import Position, Movement, Duration, ServiceStatus
-#from module.servo import todo
 
 app = FastAPI()
 
@@ -63,13 +62,3 @@ async def service_camera(body: ServiceStatus):
 async def service_camera(body: ServiceStatus):
     # apply
     return {}
-
-###
-##  MAIN
-###
-
-def main():
-    pass
-
-if __name__ == "__main__":
-    main()
