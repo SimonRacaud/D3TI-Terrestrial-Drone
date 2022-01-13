@@ -11,3 +11,8 @@ sudo apt-get install i2c-tools
 sudo i2cdetect -y 1
 
 sudo pip3 install adafruit-circuitpython-servokit
+
+## Server
+
+sudo apt install pip -y && \
+    pip install fastapi && pip install "uvicorn[standard]"
