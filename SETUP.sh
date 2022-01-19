@@ -14,5 +14,10 @@ sudo pip3 install adafruit-circuitpython-servokit
 
 ## Server
 
-sudo apt install pip -y && \
-    pip install fastapi && pip install "uvicorn[standard]"
+pip install fastapi && pip install "uvicorn[standard]"
+
+sudo apt-get install python3-picamera
+
+## Streaming server
+sudo dpkg -i rws_0.74.1_armhf.deb
+# config in : /opt/rws/etc
