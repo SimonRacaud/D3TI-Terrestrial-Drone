@@ -7,6 +7,7 @@ interface IProps {
 
 interface IState {
     showTerminal: boolean;
+    connected: boolean;
 }
 
 export default class Header extends React.Component<IProps, IState> {
@@ -15,12 +16,27 @@ export default class Header extends React.Component<IProps, IState> {
 
         this.state = {
             showTerminal: false,
+            connected: false
         }
     }
 
     handlerTerminalButton() {
         this.setState((previousState: IState, props: IProps) => ({
             showTerminal: !previousState.showTerminal,
+        }));
+    }
+
+    connection() {
+        // TODO
+        this.setState((previousState: IState, props: IProps) => ({
+            connected: true,
+        }));
+    }
+
+    disconnection() {
+        // TODO
+        this.setState((previousState: IState, props: IProps) => ({
+            connected: false,
         }));
     }
 
@@ -31,8 +47,14 @@ export default class Header extends React.Component<IProps, IState> {
                     style={styles.container}
                 >
                     <View style={styles.leftContainer}>
-                        <View style={styles.circle}></View>
-                        <Text style={styles.title}>Connected</Text>
+                        {this.state.connected &&
+                            <View style={[styles.circle, styles.connectedCicle]}></View> ||
+                            <View style={[styles.circle, styles.disconnectedCicle]}></View>
+                        }
+                        {this.state.connected &&
+                            <Text style={styles.title}>Connected</Text> ||
+                            <Text style={styles.title}>Disconnected</Text>
+                        }
                     </View>
                     <TouchableOpacity
                         onPress={() => this.handlerTerminalButton()}
@@ -45,7 +67,7 @@ export default class Header extends React.Component<IProps, IState> {
                     </TouchableOpacity>
                 </View>
                 {this.state.showTerminal && <Terminal />}
-            </View>
+            </View >
         );
     }
 }
@@ -74,8 +96,13 @@ const styles = StyleSheet.create({
         width: 25,
         height: 25,
         borderRadius: 44 / 2,
-        backgroundColor: '#00FF00',
         marginStart: 10
+    },
+    connectedCicle: {
+        backgroundColor: "#00FF00",
+    },
+    disconnectedCicle: {
+        backgroundColor: "#FF0000",
     },
     title: {
         color: "#FFFFFF",

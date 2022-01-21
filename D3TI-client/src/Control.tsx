@@ -5,16 +5,22 @@ import { Joystick } from 'react-joystick-component';
 export default class Control extends React.Component {
 
     handlerLeftJoystickMove() {
-
+        // TODO
     }
     handlerLeftJoystickStop() {
-
+        // TODO
     }
     handlerSound() {
-
+        // TODO
     }
     handlerFire() {
-
+        // TODO
+    }
+    handlerRightJoystickMove() {
+        // TODO
+    }
+    handlerRightJoystickStop() {
+        // TODO
     }
 
 
@@ -47,8 +53,8 @@ export default class Control extends React.Component {
                         size={100}
                         baseColor="#50505050"
                         stickColor="black"
-                        move={this.handlerLeftJoystickMove}
-                        stop={this.handlerLeftJoystickStop}
+                        move={this.handlerRightJoystickMove}
+                        stop={this.handlerRightJoystickStop}
                     />
                 </View>
             </View>
