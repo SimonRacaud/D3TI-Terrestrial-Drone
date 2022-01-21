@@ -60,10 +60,10 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         width: '100%',
-        height: '50%',
+        height: 300,
         position: 'absolute',
         left: 0,
-        top: '50%',
+        bottom: 0,
         justifyContent: 'space-between',
         flexDirection: 'row'
     },

@@ -1,35 +1,63 @@
 import React from "react"
-import { StyleSheet, View, Text, Image, Alert, TouchableOpacity } from "react-native";
+import { StyleSheet, View, Text, Image, TouchableOpacity } from "react-native";
+import Terminal from "./Terminal";
 
-export default class Header extends React.Component {
+interface IProps {
+}
+
+interface IState {
+    showTerminal: boolean;
+}
+
+export default class Header extends React.Component<IProps, IState> {
+    constructor(props: IProps) {
+        super(props);
+
+        this.state = {
+            showTerminal: false,
+        }
+    }
+
     handlerTerminalButton() {
-        // TODO
+        this.setState((previousState: IState, props: IProps) => ({
+            showTerminal: !previousState.showTerminal,
+        }));
     }
 
     render() {
         return (
-            <View
-                style={styles.container}
-            >
-                <View style={styles.leftContainer}>
-                    <View style={styles.circle}></View>
-                    <Text style={styles.title}>Connected</Text>
-                </View>
-                <TouchableOpacity
-                    onPress={() => this.handlerTerminalButton()}
-                    style={styles.terminalButton}
+            <View style={styles.rootContainer}>
+                <View
+                    style={styles.container}
                 >
-                    <Image
-                        source={require('../assets/terminal_button.png')}
-                        style={styles.terminalButtonImg}
-                    />
-                </TouchableOpacity>
+                    <View style={styles.leftContainer}>
+                        <View style={styles.circle}></View>
+                        <Text style={styles.title}>Connected</Text>
+                    </View>
+                    <TouchableOpacity
+                        onPress={() => this.handlerTerminalButton()}
+                        style={styles.terminalButton}
+                    >
+                        <Image
+                            source={require('../assets/terminal_button.png')}
+                            style={styles.terminalButtonImg}
+                        />
+                    </TouchableOpacity>
+                </View>
+                {this.state.showTerminal && <Terminal />}
             </View>
         );
     }
 }
 
 const styles = StyleSheet.create({
+    rootContainer: {
+        zIndex: 1,
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: '100%',
+    },
     container: {
         backgroundColor: '#000000',
         opacity: 0.8,
