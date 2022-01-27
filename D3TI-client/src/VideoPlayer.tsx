@@ -1,16 +1,20 @@
 import React from "react"
 import { View, StyleSheet, Image } from "react-native";
+import { WebView } from 'react-native-webview';
 
 export default class VideoPlayer extends React.Component {
 
     render() {
         return (
             <View style={styles.container}>
-                <Image
+                <WebView
+                    originWhitelist={['*']}
+                    source={{ html: '<h1>Hello world</h1>' }}
+                />
+                {<Image
                     source={require("../assets/camera_frame_5.png")}
                     style={styles.camera_frame}
-                />
-                {/* TODO video player */}
+                />}
             </View>
         );
     }
@@ -28,5 +32,13 @@ const styles = StyleSheet.create({
         width: '90%',
         height: '90%',
         resizeMode: 'stretch',
+        position: 'absolute',
+        bottom: '5%',
+        left: '5%',
+    },
+    webview: {
+        marginTop: 100,
+        width: '50%',
+        height: '50%',
     }
 });

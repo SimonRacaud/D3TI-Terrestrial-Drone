@@ -1,10 +1,23 @@
 import React from "react"
 import { View, StyleSheet, Button } from "react-native";
-import { Joystick } from 'react-joystick-component';
+import { KorolJoystick } from "korol-joystick";
+
+interface JoystickData {
+    type: string;
+    position: {
+        x: number;
+        y: number;
+    }
+    force: number;
+    angle: {
+        radian: number;
+        degree: number;
+    }
+}
 
 export default class Control extends React.Component {
 
-    handlerLeftJoystickMove() {
+    handlerLeftJoystickMove(data: JoystickData) {
         // TODO
     }
     handlerLeftJoystickStop() {
@@ -16,7 +29,7 @@ export default class Control extends React.Component {
     handlerFire() {
         // TODO
     }
-    handlerRightJoystickMove() {
+    handlerRightJoystickMove(data: JoystickData) {
         // TODO
     }
     handlerRightJoystickStop() {
@@ -34,12 +47,10 @@ export default class Control extends React.Component {
                             onPress={this.handlerSound}
                         />
                     </View>
-                    <Joystick
-                        size={100}
-                        baseColor="#50505050"
-                        stickColor="black"
-                        move={this.handlerLeftJoystickMove}
-                        stop={this.handlerLeftJoystickStop}
+                    <KorolJoystick
+                        radius={50}
+                        color="#000000"
+                        onMove={this.handlerLeftJoystickMove}
                     />
                 </View>
                 <View style={styles.rightContainer}>
@@ -49,12 +60,10 @@ export default class Control extends React.Component {
                             onPress={this.handlerFire}
                         />
                     </View>
-                    <Joystick
-                        size={100}
-                        baseColor="#50505050"
-                        stickColor="black"
-                        move={this.handlerRightJoystickMove}
-                        stop={this.handlerRightJoystickStop}
+                    <KorolJoystick
+                        radius={50}
+                        color="#000000"
+                        onMove={this.handlerRightJoystickMove}
                     />
                 </View>
             </View>
@@ -66,7 +75,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         width: '100%',
-        height: 300,
+        height: 400,
         position: 'absolute',
         left: 0,
         bottom: 0,
@@ -88,7 +97,7 @@ const styles = StyleSheet.create({
     },
     button: {
         width: 100,
-        height: 20,
-        marginBottom: 50,
+        height: 40,
+        marginBottom: 40,
     }
 });
