@@ -27,6 +27,8 @@ div#errorMsg p {
 body {
   font-family: 'Roboto', sans-serif;
   font-weight: 300;
+  height: 100vh;
+  width: 100vw;
 }
 
 a {
@@ -77,7 +79,6 @@ max-width: 100%;
 body {
 font-family: 'Roboto', sans-serif;
 margin: 0;
-padding: 1em;
 word-break: break-word;
 }
 
@@ -120,9 +121,7 @@ font-weight: 400;
 }
 
 div#container {
-margin: 0 auto 0 auto;
-max-width: 40em;
-padding: 1em 1.5em 1.3em 1.5em;
+margin: 0;
 }
 
 div#links {
@@ -158,6 +157,8 @@ html {
 /* avoid annoying page width change
 when moving from the home page */
 overflow-y: scroll;
+height: 100vh;
+width: 100vw;
 }
 
 img {
@@ -190,21 +191,6 @@ border-bottom: 1px solid #aaa;
 padding: 0 0 20px 0;
 }
 
-section p:last-of-type {
-margin: 0;
-}
-
-section {
-  border-bottom: 1px solid #eee;
-  margin: 0 0 30px 0;
-  padding: 0 0 20px 0;
-}
-
-section:last-of-type {
-  border-bottom: none;
-  padding: 0 0 1em 0;
-}
-
 select {
   margin: 0 1em 1em 0;
   position: relative;
@@ -225,7 +211,6 @@ textarea {
 
 video {
   background: #222;
-  margin: 0 0 20px 0;
   width: 100%;
 }
 
@@ -271,9 +256,16 @@ button#showConfig {
   float: right;
 }
 
+#media_configurations {
+  background-color: white;
+  position: absolute;
+    left: 0;
+    top: 0;
+    min-width: 50em;
+}
+
 .configdetails {
     display: block;
-    margin: 0.3em 0 0 0;
     padding: 0.5em 0.5em 0.5em 0.5em;
     line-height: 1.3em;
     margin: 0 0 0.3em 0;

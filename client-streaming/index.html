@@ -12,13 +12,17 @@
 <body>
     <section>
         <div id="container">
+            <!-- VIDEO PLAYER -->
             <video id="remoteVideo" autoplay playsinline muted width="100%" height="100%"></video>
+
+            <!-- LIVE CONTROLS -->
             <div>
                 <button id="Connect">Connect</button>
                 <button id="Disconnect">Disconnect</button>
                 <button onclick="toogleOptions()" id="showConfig">Show Video Settings</button>
             </div>
 
+            <!-- CONFIG -->
             <div id="media_configurations" class="configdetails" style="display:none">
                 <div class="configdetails">
                     <div class="configitem">
