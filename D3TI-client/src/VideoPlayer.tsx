@@ -6,13 +6,15 @@ export default class VideoPlayer extends React.Component {
 
     render() {
         return (
-
             <View style={styles.container}>
                 <WebView
                     style={styles.webview}
+                    javaScriptEnabled={true}
+                    domStorageEnabled={true}
                     originWhitelist={['*']}
-                    source={{ html: '<h1>Hello world</h1>' }}
+                    source={{ uri: 'http://127.0.0.1:8889/' }}
                     onError={(event) => alert(`Webview error: ${event.nativeEvent.description}`)}
+                    onHttpError={(event) => alert(`Webview http error: ${event.nativeEvent.description}`)}
                 />
                 <Image
                     source={require("../assets/camera_frame_5.png")}
@@ -41,6 +43,5 @@ const styles = StyleSheet.create({
     webview: {
         width: '100%',
         height: '100%',
-        backgroundColor: 'red'
     }
 });
