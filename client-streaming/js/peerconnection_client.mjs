@@ -128,8 +128,8 @@ class PeerConnectionClient {
     if (this._pc.iceConnectionState === 'completed') {
       console.log(
         'ICE complete time: ' +
-          (window.performance.now() - this._startTime).toFixed(0) +
-          'ms.'
+        (window.performance.now() - this._startTime).toFixed(0) +
+        'ms.'
       );
     }
   }

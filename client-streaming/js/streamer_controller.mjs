@@ -105,6 +105,7 @@ class StreamerController {
             console.log('Using Media Config : ' + JSON.stringify(media_config));
             this.config_media_.setJsonConfig(media_config);
             this.config_media_.reloadConfigData();
+            this.startStreamHandler(); // start streaming session
             return true;
           })
           .catch((error) => {
@@ -225,6 +226,15 @@ class StreamerController {
     console.trace(`PeerConnecdtion Error: ${error_level} : ${error_string}`);
   }
 
+  startStreamHandler() {
+    console.log('Starting streamer session');
+    this._streamer_connection.createSession({
+      videoElement: Constants.ELEMENT_VIDEO,
+      onpeerconnectionerror: this.onPeerConnectionError.bind(this),
+    });
+    this.toggleButton(ButtonState.disableConnect);
+  }
+
   hookElement() {
     // connect and disable button
     this._connectButton = document.getElementById(Constants.ELEMENT_CONNECT);
@@ -232,14 +242,7 @@ class StreamerController {
       Constants.ELEMENT_DISCONNECT
     );
     this._remoteVideo = document.getElementById(Constants.ELEMENT_VIDEO);
-    this._connectButton.onclick = () => {
-      console.log('Starting streamer session');
-      this._streamer_connection.createSession({
-        videoElement: Constants.ELEMENT_VIDEO,
-        onpeerconnectionerror: this.onPeerConnectionError.bind(this),
-      });
-      this.toggleButton(ButtonState.disableConnect);
-    };
+    this._connectButton.onclick = () => this.startStreamHandler()
     this._disconnectButton.onclick = () => {
       console.log('Stopping streamer session');
       this._streamer_connection.destroySession();
