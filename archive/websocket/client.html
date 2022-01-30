@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Websocket</title>
+    </head>
+    <body>
+        <button onclick="apply()">Click</button>
+
+        <script type="text/javascript">
+            const socket = new WebSocket('ws://localhost:8001');
+
+            socket.onmessage = ({data}) => {
+                console.log("Message from server ", data);
+            }
+
+            function apply() {
+                    console.log("send data");
+                    socket.send('hello world');
+                }
+            
+
+        </script>
+    </body>
+</html>
