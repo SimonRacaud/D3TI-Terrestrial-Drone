@@ -5,6 +5,7 @@ import { WebView } from 'react-native-webview';
 export default class VideoPlayer extends React.Component {
 
     render() {
+        // TODO: update IP addr
         return (
             <View style={styles.container}>
                 <WebView
@@ -12,9 +13,16 @@ export default class VideoPlayer extends React.Component {
                     javaScriptEnabled={true}
                     domStorageEnabled={true}
                     originWhitelist={['*']}
-                    source={{ uri: 'http://127.0.0.1:8889/' }}
+                    source={{ uri: 'http://192.168.103.91:8081/' }}
                     onError={(event) => alert(`Webview error: ${event.nativeEvent.description}`)}
                     onHttpError={(event) => alert(`Webview http error: ${event.nativeEvent.description}`)}
+                    injectedJavaScriptBeforeContentLoaded={`
+                        window.onerror = function(message, sourcefile, lineno, colno, error) {
+                        alert("Message: " + message + " - Source: " + sourcefile + " Line: " + lineno + ":" + colno);
+                        return true;
+                        };
+                        true;
+                    `}
                 />
                 <Image
                     source={require("../assets/camera_frame_5.png")}
@@ -41,7 +49,7 @@ const styles = StyleSheet.create({
         left: '5%',
     },
     webview: {
-        width: '100%',
+        /*width: '100vw',*/
         height: '100%',
     }
 });
