@@ -1,7 +1,7 @@
 from adafruit_servokit import ServoKit
 
 # By default, all HATs are address 0x40
-kit = ServoKit(channels=16, address=0x41)
+kit = ServoKit(channels=16, address=0x42)
 
 def position_to_angle(position: int):
     if position > 100 or position < -100:
@@ -13,10 +13,10 @@ def position_to_angle(position: int):
     return 0
 
 def servo_set_position(position1: int, position2: int):
-    kit.servo[0].angle = position_to_angle(position1)
-    kit.continuous_servo[0].throttle = 0
-    kit.servo[1].angle = position_to_angle(position2)
-    kit.continuous_servo[1].throttle = 0
+    kit.servo[0].angle = position1
+    #kit.continuous_servo[0].throttle = 0
+    kit.servo[1].angle = position2
+    #kit.continuous_servo[1].throttle = 0
 
 """
 def servo_set_movement(throttle1: int, throttle2: int):

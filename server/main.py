@@ -3,6 +3,7 @@ import uvicorn
 
 from network.models import Position, Movement, Duration, ServiceStatus
 from module.motor import motor_set_movement
+from module.servo import servo_set_position
 from module.collision import startCollisionSystem, stopCollisionSystem
 
 app = FastAPI()
@@ -36,9 +37,12 @@ def read_root():
 
 @app.post("/turret/position")
 async def turret_set_position(body: Position):
-    if body.position1 < -100:
-        raise HTTPException(status_code=400, detail="Error")
+    if body.position1 < 0 or body.position1 > 180:
+        raise HTTPException(status_code=400, detail="Position 1 value out of range (0 - 180)")
+    if body.position2 < 0 or body.position2 > 180:
+        raise HTTPException(status_code=400, detail="Position 2 value out of range (0 - 180)")
     # set position servo
+    servo_set_position(body.position1, body.position2)
     return {}
 
 @app.post("/turret/movement")
