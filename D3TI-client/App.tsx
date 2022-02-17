@@ -1,11 +1,12 @@
 import React from 'react';
-import { Dimensions, StyleSheet, Text, View } from 'react-native';
+import { Dimensions, StyleSheet, View } from 'react-native';
 import Control from './src/Control';
 import Header from './src/Header'
 import VideoPlayer from './src/VideoPlayer';
 import { OrientationLocker, LANDSCAPE } from 'react-native-orientation-locker';
 
-const ScreenHeight = Dimensions.get("window").height;
+export const ScreenHeight = Dimensions.get("window").height;
+export const ScreenWidth = Dimensions.get("window").width;
 
 export default class App extends React.Component {
   render() {
@@ -23,6 +24,7 @@ export default class App extends React.Component {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#fff',
-    height: ScreenHeight
+    height: ScreenHeight,
+    width: ScreenWidth
   },
 });
