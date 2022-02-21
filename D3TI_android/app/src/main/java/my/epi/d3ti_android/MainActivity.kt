@@ -7,9 +7,12 @@ import android.webkit.WebView
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import io.github.controlwear.virtual.joystick.android.JoystickView
 import my.epi.d3ti_android.Activity.StartActivity
 import my.epi.d3ti_android.Utils.ErrorMessage
 import my.epi.d3ti_android.web.VideoWebViewClient
+import java.lang.Math.cos
+import java.lang.Math.sin
 
 class MainActivity : AppCompatActivity() {
     private lateinit var serverIp: String
@@ -19,19 +22,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val extras = intent.extras
-        this.serverIp = if (null == extras?.getString("ip")) this.getString(R.string.def_server_ip)
-            else extras.getString("ip")!!
-        this.serverPort = if (extras == null || !extras.containsKey("port")) this.getString(R.string.def_server_port)
-            else extras.getString("port")!!
-        if (extras != null && extras?.containsKey("ip")) {
-            this.createWebView()
-        }
-
-//        val joystick = findViewById<View>(R.id.joystickViewLeft) as JoystickView
-//        joystick.setOnMoveListener { angle, strength ->
-//            // do whatever you want
-//        }
+        this.configWebView()
 
         val buttonSettings = findViewById<ImageButton>(R.id.settingButton)
         buttonSettings.setOnClickListener {
@@ -46,6 +37,50 @@ class MainActivity : AppCompatActivity() {
             ErrorMessage.show(this, "Work in progress")
         }
         this.createWebView()
+        this.joysticksControl()
+    }
+
+    private fun joysticksControl()
+    {
+        // Control main motors
+        val joystickLeft = findViewById<View>(R.id.joystickViewLeft) as JoystickView
+        joystickLeft.setOnMoveListener { angle, strength ->
+            val x = cos(angle.toDouble()) * (strength / 100) // -1; 1
+            val y = sin(angle.toDouble()) * (strength / 100) // -1; 1
+
+            val coefLeft: Double = if (x < 0) 1.0 else (1 - x)
+            val coefRight: Double = if (x > 0) 1.0 else (-x)
+            val throttleLeft = (y * 100) * coefLeft // (-100 to 100)
+            val throttleRight = (y * 100) * coefRight // (-100 to 100)
+
+            // TODO: api call
+            println("Joystick left : angle ${angle}, strength $strength")
+        }
+        // Control turret servo motors
+        val joystickRight = findViewById<View>(R.id.joystickViewRight) as JoystickView
+        joystickRight.setOnMoveListener { angle, strength ->
+            val x = cos(angle.toDouble()) * (strength / 100) // -1; 1
+            val y = sin(angle.toDouble()) * (strength / 100) // -1; 1
+
+            val angleX = x * 90 + 90 // (0 to 180)
+            val angleY = y * 90 + 90 // (0 to 180)
+
+            // TODO: api call
+            println("Joystick Right : angle ${angle}, strength $strength")
+        }
+    }
+
+    private fun configWebView()
+    {
+        val extras = intent.extras
+
+        this.serverIp = if (null == extras?.getString("ip")) this.getString(R.string.def_server_ip)
+        else extras.getString("ip")!!
+        this.serverPort = if (extras == null || !extras.containsKey("port")) this.getString(R.string.def_server_port)
+        else extras.getString("port")!!
+        if (extras != null && extras?.containsKey("ip")) {
+            this.createWebView()
+        }
     }
 
     private fun setConnectionStatus(connected: Boolean)
