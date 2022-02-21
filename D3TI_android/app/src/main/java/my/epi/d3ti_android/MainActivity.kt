@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.webkit.WebView
+import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -38,6 +39,17 @@ class MainActivity : AppCompatActivity() {
         this.createWebView()
         this.joysticksControl()
         this.showTerminal(savedInstanceState)
+
+        val buttonActionAlert = findViewById<Button>(R.id.alertButton)
+        val buttonActionFire = findViewById<Button>(R.id.fireButton)
+        buttonActionAlert.setOnClickListener {
+            terminalFragment.pushElement("Buzzer: trigger")
+            // TODO:
+        }
+        buttonActionFire.setOnClickListener {
+            terminalFragment.pushElement("Turret: fire")
+            // TODO
+        }
     }
 
     private fun showTerminal(savedInstanceState: Bundle?)
@@ -63,28 +75,34 @@ class MainActivity : AppCompatActivity() {
         // Control main motors
         val joystickLeft = findViewById<View>(R.id.joystickViewLeft) as JoystickView
         joystickLeft.setOnMoveListener { angle, strength ->
-            val x = cos(angle.toDouble()) * (strength / 100) // -1; 1
-            val y = sin(angle.toDouble()) * (strength / 100) // -1; 1
+            val radian: Double = 0.0174533 * angle.toDouble()
+            var strengthDb: Double = strength.toDouble()
+            val x: Double = kotlin.math.cos(radian) * (strengthDb / 100.0) // -1; 1
+            val y: Double = kotlin.math.sin(radian) * (strengthDb / 100.0) // -1; 1
 
-            val coefLeft: Double = if (x < 0) 1.0 else (1 - x)
-            val coefRight: Double = if (x > 0) 1.0 else (-x)
-            val throttleLeft = (y * 100) * coefLeft // (-100 to 100)
-            val throttleRight = (y * 100) * coefRight // (-100 to 100)
+            val coefLeft: Double = if (x < 0) 1.0 else (1 - x);
+            val coefRight: Double = if (x > 0) 1.0 else (1 + x);
+            if (y < 0)
+                strengthDb = -strengthDb
+            val throttleLeft: Int = (strengthDb * coefLeft).toInt() // (-100 to 100)
+            val throttleRight: Int = (strengthDb * coefRight).toInt() // (-100 to 100)
 
             // TODO: api call
-            println("Joystick left : angle ${angle}, strength $strength")
+            terminalFragment.pushElement("Motor: left $throttleLeft right $throttleRight")
         }
         // Control turret servo motors
         val joystickRight = findViewById<View>(R.id.joystickViewRight) as JoystickView
         joystickRight.setOnMoveListener { angle, strength ->
-            val x = cos(angle.toDouble()) * (strength / 100) // -1; 1
-            val y = sin(angle.toDouble()) * (strength / 100) // -1; 1
+            var strengthDb: Double = strength.toDouble()
+            val radian: Double = 0.0174533 * angle.toDouble()
+            val x = kotlin.math.cos(radian) * (strengthDb / 100.0) // -1; 1
+            val y = kotlin.math.sin(radian) * (strengthDb / 100.0) // -1; 1
 
-            val angleX = x * 90 + 90 // (0 to 180)
-            val angleY = y * 90 + 90 // (0 to 180)
+            val angleX = (x * 90 + 90).toInt() // (0 to 180)
+            val angleY = (y * 90 + 90).toInt() // (0 to 180)
 
             // TODO: api call
-            println("Joystick Right : angle ${angle}, strength $strength")
+            terminalFragment.pushElement("Turret: X $angleX Y $angleY")
         }
     }
 

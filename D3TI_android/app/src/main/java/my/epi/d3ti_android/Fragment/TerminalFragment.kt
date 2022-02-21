@@ -31,10 +31,12 @@ class TerminalFragment : Fragment() {
     }
 
     fun pushElement(text: String) {
-        val recyclerView = requireView().findViewById<RecyclerView>(R.id.recycler_view)
+        if (view != null) {
+            val recyclerView = requireView().findViewById<RecyclerView>(R.id.recycler_view)
 
-        itemList.add("> $text")
-        recyclerView.adapter = TerminalAdapter(itemList)
-        recyclerView.scrollToPosition(itemList.size - 1)
+            itemList.add("> $text")
+            recyclerView.adapter = TerminalAdapter(itemList)
+            recyclerView.scrollToPosition(itemList.size - 1)
+        }
     }
 }
