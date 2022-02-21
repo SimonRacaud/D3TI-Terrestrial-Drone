@@ -18,9 +18,9 @@
         android:id="@+id/joystickViewLeft"
         android:layout_width="200dp"
         android:layout_height="200dp"
-        app:JV_backgroundColor="#000000"
+        app:JV_backgroundColor="#10000000"
         app:JV_borderWidth="0dp"
-        app:JV_buttonColor="#FF0000"
+        app:JV_buttonColor="#FF0000FF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -38,9 +38,9 @@
         android:id="@+id/joystickViewRight"
         android:layout_width="200dp"
         android:layout_height="200dp"
-        app:JV_backgroundColor="#000000"
+        app:JV_backgroundColor="#10000000"
         app:JV_borderWidth="0dp"
-        app:JV_buttonColor="#FF0000"
+        app:JV_buttonColor="#0000FF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         />
