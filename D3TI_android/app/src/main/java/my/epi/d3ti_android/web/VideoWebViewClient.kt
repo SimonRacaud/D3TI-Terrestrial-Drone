@@ -23,7 +23,7 @@ internal class VideoWebViewClient(val context: MainActivity) : WebViewClient() {
             context,
             error.toString()
         ) {
-            context.finish()
+            // TODO: loading failed
         }
     }
 }

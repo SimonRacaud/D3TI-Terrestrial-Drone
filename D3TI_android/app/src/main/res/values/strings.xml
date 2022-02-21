@@ -3,4 +3,10 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="label_server_ip_address">Server IP address</string>
+
+    <string name="connected">Connected</string>
+    <string name="disconnected">Disconnected</string>
+
+    <string name="def_server_ip">192.168.42.42</string>
+    <string name="def_server_port">8081</string>
 </resources>
