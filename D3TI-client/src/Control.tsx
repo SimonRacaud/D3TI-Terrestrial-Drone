@@ -1,39 +1,85 @@
 import React from "react"
 import { View, StyleSheet, Button } from "react-native";
-import { KorolJoystick } from "korol-joystick";
-
-interface JoystickData {
-    type: string;
-    position: {
-        x: number;
-        y: number;
-    }
-    force: number;
-    angle: {
-        radian: number;
-        degree: number;
-    }
-}
+import { SERVER_IP } from "@env";
+import AxisPad, { JoystickUpdateEvent } from "./Joystick/Joystick";
 
 export default class Control extends React.Component {
 
-    handlerLeftJoystickMove(data: JoystickData) {
-        // TODO
+    async handlerLeftJoystickMove(data: JoystickUpdateEvent) {
+        // Turret control
+        const position = data.position;
+
+        const angleX = position.x * 90 + 90; // (0 to 180)
+        const angleY = position.y * 90 + 90; // (0 to 180)
+
+        console.debug("Turret angle : X", angleX, "Y", angleY); // TODO: DEBUG
+        try {
+            const response = await fetch(`http://${SERVER_IP}/turret/position`, {
+                method: 'POST',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    position1: angleX,
+                    position2: angleY
+                })
+            });
+            this.responseHandler(response);
+        } catch (err) { }
     }
-    handlerLeftJoystickStop() {
-        // TODO
+
+    async handlerSound() {
+        const response = await fetch(`http://${SERVER_IP}/audio/buzzer`, {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json'
+            }
+        });
+        this.responseHandler(response);
     }
-    handlerSound() {
-        // TODO
+    async handlerFire() {
+        const response: Response = await fetch(`http://${SERVER_IP}/turret/fire`, {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json'
+            }
+        });
+        this.responseHandler(response);
     }
-    handlerFire() {
-        // TODO
+    async handlerRightJoystickMove(data: JoystickUpdateEvent) {
+        // Movement control
+        const position = data.position;
+
+        const coefLeft = (position.x < 0) ? 1 : (1 - position.x);
+        const coefRight = (position.x > 0) ? 1 : (-position.x);
+
+        const throttleLeft = (position.y * 100) * coefLeft; // (-100 to 100)
+        const throttleRight = (position.y * 100) * coefRight; // (-100 to 100)
+
+        console.debug("Motors throttle : Left", throttleLeft, "Right", throttleRight); // TODO: DEBUG
+        try {
+            const response = await fetch(`http://${SERVER_IP}/wheel/movement`, {
+                method: 'POST',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    throttle1: 0,
+                    throttle2: 0
+                })
+            });
+            this.responseHandler(response);
+        } catch (err) { }
     }
-    handlerRightJoystickMove(data: JoystickData) {
-        // TODO
-    }
-    handlerRightJoystickStop() {
-        // TODO
+
+    responseHandler(response: Response) {
+        if (!response.ok)
+            console.error(`Network error: Code ${response.statusText}, ${response.body}.`)
+        //TODO: Terminal log
     }
 
 
@@ -44,13 +90,12 @@ export default class Control extends React.Component {
                     <View style={styles.button}>
                         <Button
                             title="Sound"
-                            onPress={this.handlerSound}
+                            onPress={() => this.handlerSound()}
                         />
                     </View>
-                    <KorolJoystick
-                        radius={50}
-                        color="#000000"
-                        onMove={this.handlerLeftJoystickMove}
+                    <AxisPad
+                        onMove={(e: JoystickUpdateEvent) => this.handlerLeftJoystickMove(e)}
+                        radius={100}
                     />
                 </View>
                 <View style={styles.rightContainer}>
@@ -60,10 +105,9 @@ export default class Control extends React.Component {
                             onPress={this.handlerFire}
                         />
                     </View>
-                    <KorolJoystick
-                        radius={50}
-                        color="#000000"
-                        onMove={this.handlerRightJoystickMove}
+                    <AxisPad
+                        onMove={(e: JoystickUpdateEvent) => this.handlerRightJoystickMove(e)}
+                        radius={100}
                     />
                 </View>
             </View>
@@ -75,7 +119,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         width: '100%',
-        height: 400,
+        height: '100%',
         position: 'absolute',
         left: 0,
         bottom: 0,
@@ -87,6 +131,8 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-end',
         paddingStart: 40,
         paddingBottom: 40,
+        backgroundColor: "#FF00FF",
+        height: '100%',
     },
     rightContainer: {
         flex: 1,
@@ -94,6 +140,7 @@ const styles = StyleSheet.create({
         alignItems: "flex-end",
         paddingEnd: 40,
         paddingBottom: 40,
+        backgroundColor: "#FFFF00",
     },
     button: {
         width: 100,
