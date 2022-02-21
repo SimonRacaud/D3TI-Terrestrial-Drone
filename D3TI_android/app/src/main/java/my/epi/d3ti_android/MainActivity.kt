@@ -7,8 +7,10 @@ import android.webkit.WebView
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentContainerView
 import io.github.controlwear.virtual.joystick.android.JoystickView
 import my.epi.d3ti_android.Activity.StartActivity
+import my.epi.d3ti_android.Fragment.TerminalFragment
 import my.epi.d3ti_android.Utils.ErrorMessage
 import my.epi.d3ti_android.web.VideoWebViewClient
 import java.lang.Math.cos
@@ -17,6 +19,8 @@ import java.lang.Math.sin
 class MainActivity : AppCompatActivity() {
     private lateinit var serverIp: String
     private lateinit var serverPort: String
+    private var terminalFragment: TerminalFragment = TerminalFragment()
+    private var showTerminal: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,13 +35,27 @@ class MainActivity : AppCompatActivity() {
             intent.putExtra("port", serverPort)
             startActivity(intent)
         }
-        val buttonTerminal = findViewById<ImageButton>(R.id.terminalButton)
-        buttonTerminal.setOnClickListener {
-            // TODO
-            ErrorMessage.show(this, "Work in progress")
-        }
         this.createWebView()
         this.joysticksControl()
+        this.showTerminal(savedInstanceState)
+    }
+
+    private fun showTerminal(savedInstanceState: Bundle?)
+    {
+        val buttonTerminal = findViewById<ImageButton>(R.id.terminalButton)
+        if (savedInstanceState == null) {
+            val transaction = supportFragmentManager.beginTransaction()
+            transaction.replace(R.id.terminal_container_view, terminalFragment).commit()
+            supportFragmentManager.beginTransaction().detach(terminalFragment).commit()
+        }
+        buttonTerminal.setOnClickListener {
+            if (!showTerminal) {
+                supportFragmentManager.beginTransaction().attach(terminalFragment).commit()
+            } else {
+                supportFragmentManager.beginTransaction().detach(terminalFragment).commit()
+            }
+            showTerminal = !showTerminal
+        }
     }
 
     private fun joysticksControl()

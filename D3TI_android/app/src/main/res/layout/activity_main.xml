@@ -18,6 +18,13 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/terminal_container_view"
+        android:layout_width="400dp"
+        android:layout_height="300dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/includeHeader" />
+
     <include
         android:id="@+id/includeControl"
         layout="@layout/app_controls"

@@ -16,6 +16,7 @@
         <entry key="app/src/main/res/layout/app_header.xml" value="0.25" />
         <entry key="app/src/main/res/layout/app_videoplayer.xml" value="0.18046875" />
         <entry key="app/src/main/res/layout/fragment_header.xml" value="0.2" />
+        <entry key="app/src/main/res/layout/fragment_terminal.xml" value="0.18046875" />
       </map>
     </option>
   </component>
