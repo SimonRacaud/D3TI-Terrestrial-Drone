@@ -6,15 +6,15 @@ from data import Direction
 from module.motor import motor_set_movement, motor_get_movement
 
 ### CONFIG ###
-TRIG1 = 26        
+TRIG1 = 26
 ECHO1 = 19
 
 TRIG2 = 16
 ECHO2 = 20
 
-CHECK_INTERVAL = 0.5 # second
+CHECK_INTERVAL = 0.5  # second
 
-MIN_DISTANCE = 10 # cm
+MIN_DISTANCE = 10  # cm
 
 ### SETUP ###
 
@@ -24,6 +24,7 @@ GPIO.setmode(GPIO.BCM)
 
 event = threading.Event()
 collisionSystem = None
+
 
 class CollisionSystem(threading.Thread):
     def __init__(self, event, callback):
@@ -38,9 +39,9 @@ class CollisionSystem(threading.Thread):
         GPIO.setup(TRIG2, GPIO.OUT)
         GPIO.setup(ECHO2, GPIO.IN)
         GPIO.output(TRIG2, False)
-    
+
     def stop(self):
-        self._stop_event.set() 
+        self._stop_event.set()
 
     def stopped(self):
         return self._stop_event.is_set()
@@ -54,7 +55,6 @@ class CollisionSystem(threading.Thread):
                 self.callback(Direction.BACKWARD)
             time.sleep(CHECK_INTERVAL)
         self.event.set()
-        GPIO.cleanup()
         print("Collision service stopped.")
 
     def _compute_distance(self, trig, echo):
@@ -68,9 +68,10 @@ class CollisionSystem(threading.Thread):
             startTime = time.time()
         while GPIO.input(echo) == 1:
             endTime = time.time()
-        distance = round((endTime - startTime) * 34000 / 2, 1) # DEBUG
+        distance = round((endTime - startTime) * 34000 / 2, 1)  # DEBUG
         #print("Distance: ", distance)
         return distance
+
 
 def callback_stop_motor(direction: Direction):
     (throttle1, throttle2) = motor_get_movement()
@@ -81,6 +82,7 @@ def callback_stop_motor(direction: Direction):
         print("collision: stop forward movement")
         motor_set_movement(0, 0)
 
+
 def startCollisionSystem():
     global collisionSystem
     if collisionSystem != None:
@@ -90,6 +92,7 @@ def startCollisionSystem():
     collision = CollisionSystem(event, callback_stop_motor)
     collision.start()
     collisionSystem = collision
+
 
 def stopCollisionSystem():
     global collisionSystem

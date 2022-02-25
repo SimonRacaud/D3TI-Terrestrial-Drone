@@ -1,10 +1,12 @@
 from fastapi import FastAPI
 import uvicorn
+import RPi.GPIO as GPIO
 
 from network.models import Position, Movement, Duration, ServiceStatus
 from module.motor import motor_set_movement
 from module.servo import servo_set_position
 from module.collision import startCollisionSystem, stopCollisionSystem
+from module.audio import buzzer_init, buzzer_play
 
 app = FastAPI()
 
@@ -15,11 +17,13 @@ if __name__ == '__main__':
 @app.on_event("shutdown")
 def shutdown_event():
     stopCollisionSystem()
+    GPIO.cleanup()
 
 
 @app.on_event("startup")
 async def startup_event():
     startCollisionSystem()
+    buzzer_init()
 
 ####
 # ENDPOINTS
@@ -80,6 +84,10 @@ async def wheel_movement(body: Movement):
 @app.post("/audio/buzzer")
 async def audio_buzzer():
     # trigger
+    try:
+        buzzer_play(1)
+    except ValueError as err:
+        raise HTTPException(status_code=500, detail=err)
     return {}
 
 
