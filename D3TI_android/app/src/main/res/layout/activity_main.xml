@@ -7,16 +7,19 @@
     tools:context=".MainActivity">
 
     <include
-        android:id="@+id/includeVideoPlayer"
-        layout="@layout/app_videoplayer"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <include
         android:id="@+id/includeHeader"
         layout="@layout/app_header"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <include
+        android:id="@+id/includeVideoPlayer"
+        layout="@layout/app_videoplayer"
+        android:layout_height="0dp"
+        android:layout_width="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/includeHeader" />
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/terminal_container_view"
