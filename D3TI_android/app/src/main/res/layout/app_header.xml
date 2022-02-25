@@ -30,6 +30,16 @@
         app:layout_constraintTop_toTopOf="@+id/viewConnection" />
 
     <ImageButton
+        android:id="@+id/videoReloadButton"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="10dp"
+        android:background="@drawable/ic_baseline_refresh_24"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/settingButton"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
         android:id="@+id/settingButton"
         android:layout_width="40dp"
         android:layout_height="40dp"

@@ -39,6 +39,10 @@ class MainActivity : AppCompatActivity() {
             intent.putExtra("port", serverPort)
             startActivity(intent)
         }
+        val buttonVideoRefresh = findViewById<ImageButton>(R.id.videoReloadButton)
+        buttonVideoRefresh.setOnClickListener {
+            findViewById<WebView>(R.id.webview).reload()
+        }
         this.createWebView()
         this.joysticksControl()
         this.showTerminal(savedInstanceState)

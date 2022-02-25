@@ -11,17 +11,20 @@ app = FastAPI()
 if __name__ == '__main__':
     uvicorn.run("main:app", port=80, host='0.0.0.0')
 
+
 @app.on_event("shutdown")
 def shutdown_event():
     stopCollisionSystem()
+
 
 @app.on_event("startup")
 async def startup_event():
     startCollisionSystem()
 
 ####
-##      ENDPOINTS
+# ENDPOINTS
 ####
+
 
 @app.get("/")
 def read_root():
@@ -35,15 +38,19 @@ def read_root():
         {"UPDATE /collision": "Start or Stop collision system"},
     ]}
 
+
 @app.post("/turret/position")
 async def turret_set_position(body: Position):
     if body.position1 < 0 or body.position1 > 180:
-        raise HTTPException(status_code=400, detail="Position 1 value out of range (0 - 180)")
+        raise HTTPException(
+            status_code=400, detail="Position 1 value out of range (0 - 180)")
     if body.position2 < 0 or body.position2 > 180:
-        raise HTTPException(status_code=400, detail="Position 2 value out of range (0 - 180)")
+        raise HTTPException(
+            status_code=400, detail="Position 2 value out of range (0 - 180)")
     # set position servo
     servo_set_position(body.position1, body.position2)
     return {}
+
 
 @app.post("/turret/movement")
 async def turret_set_movement(body: Movement):
@@ -52,12 +59,14 @@ async def turret_set_movement(body: Movement):
     # set movement servo
     return {}
 
+
 @app.post("/turret/fire")
 async def turret_fire():
     if False:
         raise HTTPException(status_code=400, detail="Error")
     # fire
     return {}
+
 
 @app.post("/wheel/movement")
 async def wheel_movement(body: Movement):
@@ -67,18 +76,21 @@ async def wheel_movement(body: Movement):
         raise HTTPException(status_code=400, detail=err)
     return {}
 
+
 @app.post("/audio/buzzer")
 async def audio_buzzer():
     # trigger
     return {}
+
 
 @app.put("/camera")
 async def service_camera(body: ServiceStatus):
     # apply
     return {}
 
+
 @app.put("/collision")
-async def service_camera(body: ServiceStatus):
+async def service_collision(body: ServiceStatus):
     try:
         if body.status:
             startCollisionSystem()
