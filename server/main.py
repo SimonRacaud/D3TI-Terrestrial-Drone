@@ -9,6 +9,7 @@ from module.collision import startCollisionSystem, stopCollisionSystem
 from module.audio import buzzer_init, buzzer_play
 
 app = FastAPI()
+BUZZER_TIME = 0.5  # seconds
 
 if __name__ == '__main__':
     uvicorn.run("main:app", port=80, host='0.0.0.0')
@@ -85,7 +86,7 @@ async def wheel_movement(body: Movement):
 async def audio_buzzer():
     # trigger
     try:
-        buzzer_play(1)
+        buzzer_play(BUZZER_TIME)
     except ValueError as err:
         raise HTTPException(status_code=500, detail=err)
     return {}

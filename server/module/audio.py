@@ -1,5 +1,6 @@
 
 import RPi.GPIO as GPIO
+from time import sleep
 
 # SETUP
 
@@ -14,7 +15,7 @@ def buzzer_init():
     GPIO.setup(BUZZER_GPIO, GPIO.OUT)
 
 
-async def buzzer_play(time: int):
+def buzzer_play(time: float):
     GPIO.output(BUZZER_GPIO, GPIO.HIGH)
     print("Beep")
     sleep(time)  # Delay in seconds
