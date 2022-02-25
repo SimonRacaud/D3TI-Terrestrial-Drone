@@ -86,8 +86,10 @@ class MainActivity : AppCompatActivity() {
     private fun joysticksControl()
     {
         // Control main motors
+        val JOYSTICK_REFRESH_RATE = 500 // ms
+
         val joystickLeft = findViewById<View>(R.id.joystickViewLeft) as JoystickView
-        joystickLeft.setOnMoveListener { angle, strength ->
+        joystickLeft.setOnMoveListener({ angle, strength ->
             val radian: Double = 0.0174533 * angle.toDouble()
             var strengthDb: Double = strength.toDouble()
             val x: Double = kotlin.math.cos(radian) * (strengthDb / 100.0) // -1; 1
@@ -102,10 +104,11 @@ class MainActivity : AppCompatActivity() {
 
             terminalFragment.pushElement("Motor: left $throttleLeft right $throttleRight")
             this.api.postWheelMovement(throttleLeft, throttleRight)
-        }
+        }, JOYSTICK_REFRESH_RATE)
         // Control turret servo motors
         val joystickRight = findViewById<View>(R.id.joystickViewRight) as JoystickView
-        joystickRight.setOnMoveListener { angle, strength ->
+        joystickRight.isAutoReCenterButton = false
+        joystickRight.setOnMoveListener( { angle, strength ->
             var strengthDb: Double = strength.toDouble()
             val radian: Double = 0.0174533 * angle.toDouble()
             val x = kotlin.math.cos(radian) * (strengthDb / 100.0) // -1; 1
@@ -116,7 +119,7 @@ class MainActivity : AppCompatActivity() {
 
             terminalFragment.pushElement("Turret: X $angleX Y $angleY")
             this.api.postTurretPosition(angleX, angleY)
-        }
+        }, JOYSTICK_REFRESH_RATE)
     }
 
     private fun configWebView()
