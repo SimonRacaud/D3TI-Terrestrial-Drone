@@ -22,8 +22,6 @@ internal class VideoWebViewClient(val context: MainActivity) : WebViewClient() {
         ErrorMessage.show(
             context,
             error.toString()
-        ) {
-            // TODO: loading failed
-        }
+        )
     }
 }

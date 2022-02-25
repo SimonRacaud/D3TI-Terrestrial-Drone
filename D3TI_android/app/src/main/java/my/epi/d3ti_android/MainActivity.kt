@@ -155,10 +155,9 @@ class MainActivity : AppCompatActivity() {
 
     private fun createWebView() {
         val myWebView = findViewById<WebView>(R.id.webview)
-        val url = "http://"+this.serverIp+":"+this.serverPort
+        val url = "http://${this.serverIp}:${this.serverPort}/"
         myWebView?.loadUrl(url)
         myWebView?.settings?.allowContentAccess = true
-        myWebView?.settings?.allowFileAccess = true
         myWebView?.settings?.javaScriptEnabled = true
         myWebView?.webViewClient = VideoWebViewClient(this)
     }
