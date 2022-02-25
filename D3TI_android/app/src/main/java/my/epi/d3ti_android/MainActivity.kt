@@ -30,7 +30,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         this.configWebView()
-        this.api = API(this, this.serverIp)
+        val PORT_API = this.getString(R.string.def_server_api_port)
+        this.api = API(this, "http://${this.serverIp}:$PORT_API")
 
         val buttonSettings = findViewById<ImageButton>(R.id.settingButton)
         buttonSettings.setOnClickListener {
@@ -124,7 +125,7 @@ class MainActivity : AppCompatActivity() {
 
         this.serverIp = if (null == extras?.getString("ip")) this.getString(R.string.def_server_ip)
         else extras.getString("ip")!!
-        this.serverPort = if (extras == null || !extras.containsKey("port")) this.getString(R.string.def_server_port)
+        this.serverPort = if (extras == null || !extras.containsKey("port")) this.getString(R.string.def_server_video_port)
         else extras.getString("port")!!
         if (extras != null && extras?.containsKey("ip")) {
             this.createWebView()

@@ -19,7 +19,7 @@ class StartActivity : AppCompatActivity() {
         val extras = intent.extras
         this.serverIp = if (null == extras?.getString("ip")) this.getString(R.string.def_server_ip)
             else extras.getString("ip")!!
-        this.serverPort = if (extras == null || !extras.containsKey("port")) this.getString(R.string.def_server_port)
+        this.serverPort = if (extras == null || !extras.containsKey("port")) this.getString(R.string.def_server_video_port)
             else extras.getString("port")!!
 
         val serverIpInput = findViewById<EditText>(R.id.server_ip)
