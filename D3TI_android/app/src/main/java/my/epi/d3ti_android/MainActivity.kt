@@ -13,6 +13,7 @@ import io.github.controlwear.virtual.joystick.android.JoystickView
 import my.epi.d3ti_android.Activity.StartActivity
 import my.epi.d3ti_android.Fragment.TerminalFragment
 import my.epi.d3ti_android.Utils.ErrorMessage
+import my.epi.d3ti_android.web.API
 import my.epi.d3ti_android.web.VideoWebViewClient
 import java.lang.Math.cos
 import java.lang.Math.sin
@@ -22,12 +23,14 @@ class MainActivity : AppCompatActivity() {
     private lateinit var serverPort: String
     private var terminalFragment: TerminalFragment = TerminalFragment()
     private var showTerminal: Boolean = false
+    private lateinit var api: API
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         this.configWebView()
+        this.api = API(this, this.serverIp)
 
         val buttonSettings = findViewById<ImageButton>(R.id.settingButton)
         buttonSettings.setOnClickListener {
@@ -44,12 +47,17 @@ class MainActivity : AppCompatActivity() {
         val buttonActionFire = findViewById<Button>(R.id.fireButton)
         buttonActionAlert.setOnClickListener {
             terminalFragment.pushElement("Buzzer: trigger")
-            // TODO:
+            this.api.postBuzzer()
         }
         buttonActionFire.setOnClickListener {
             terminalFragment.pushElement("Turret: fire")
-            // TODO
+            this.api.postTurretFire()
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        this.api.stop() // cancel current requests
     }
 
     private fun showTerminal(savedInstanceState: Bundle?)
@@ -87,8 +95,8 @@ class MainActivity : AppCompatActivity() {
             val throttleLeft: Int = (strengthDb * coefLeft).toInt() // (-100 to 100)
             val throttleRight: Int = (strengthDb * coefRight).toInt() // (-100 to 100)
 
-            // TODO: api call
             terminalFragment.pushElement("Motor: left $throttleLeft right $throttleRight")
+            this.api.postWheelMovement(throttleLeft, throttleRight)
         }
         // Control turret servo motors
         val joystickRight = findViewById<View>(R.id.joystickViewRight) as JoystickView
@@ -101,8 +109,8 @@ class MainActivity : AppCompatActivity() {
             val angleX = (x * 90 + 90).toInt() // (0 to 180)
             val angleY = (y * 90 + 90).toInt() // (0 to 180)
 
-            // TODO: api call
             terminalFragment.pushElement("Turret: X $angleX Y $angleY")
+            this.api.postTurretPosition(angleX, angleY)
         }
     }
 
@@ -119,8 +127,11 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun setConnectionStatus(connected: Boolean)
+    var currentStatus: Boolean = false
+    fun setConnectionStatus(connected: Boolean)
     {
+        if (currentStatus == connected)
+            return // abort
         val circle = findViewById<View>(R.id.viewConnection)
         val text = findViewById<TextView>(R.id.textViewConnection)
 
@@ -131,6 +142,7 @@ class MainActivity : AppCompatActivity() {
             circle.setBackgroundResource(R.drawable.circle_red)
             text.setText(R.string.disconnected)
         }
+        currentStatus = connected
     }
 
     private fun createWebView() {
