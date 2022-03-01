@@ -131,7 +131,7 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-end',
         paddingStart: 40,
         paddingBottom: 40,
-        backgroundColor: "#FF00FF",
+        // backgroundColor: "#FF00FF",
         height: '100%',
     },
     rightContainer: {
@@ -140,7 +140,7 @@ const styles = StyleSheet.create({
         alignItems: "flex-end",
         paddingEnd: 40,
         paddingBottom: 40,
-        backgroundColor: "#FFFF00",
+        // backgroundColor: "#FFFF00",
     },
     button: {
         width: 100,
