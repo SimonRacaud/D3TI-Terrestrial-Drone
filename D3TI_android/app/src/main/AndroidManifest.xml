@@ -14,6 +14,7 @@
         android:theme="@style/Theme.D3TI_android">
         <activity
             android:name=".Activity.StartActivity"
+            android:screenOrientation="landscape"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
