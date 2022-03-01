@@ -1,6 +1,5 @@
 
-all: api
-
+all: run
 
 setup:
 	make setup -C server_streaming
