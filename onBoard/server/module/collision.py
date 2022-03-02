@@ -50,9 +50,9 @@ class CollisionSystem(threading.Thread):
     def run(self):
         print("Start collision service...")
         while not self.stopped():
-            if self._compute_distance(TRIG1, ECHO1) < MIN_DISTANCE:
-                self.callback(Direction.FORWARD)
             if self._compute_distance(TRIG2, ECHO2) < MIN_DISTANCE:
+                self.callback(Direction.FORWARD)
+            if self._compute_distance(TRIG1, ECHO1) < MIN_DISTANCE:
                 self.callback(Direction.BACKWARD)
             time.sleep(CHECK_INTERVAL)
         self.event.set()
