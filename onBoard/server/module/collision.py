@@ -42,6 +42,7 @@ class CollisionSystem(threading.Thread):
 
     def stop(self):
         self._stop_event.set()
+        print("Collision service : send stop event...")
 
     def stopped(self):
         return self._stop_event.is_set()
@@ -66,6 +67,9 @@ class CollisionSystem(threading.Thread):
         endTime = time.time()
         while GPIO.input(echo) == 0:
             startTime = time.time()
+            if startTime - endTime > 5:
+                print(
+                    "Warning: collision system GPIO ${echo} doesn't respond.")
         while GPIO.input(echo) == 1:
             endTime = time.time()
         distance = round((endTime - startTime) * 34000 / 2, 1)  # DEBUG
