@@ -30,6 +30,15 @@ class TerminalFragment : Fragment() {
         return view
     }
 
+    override fun onResume() {
+        super.onResume()
+
+        if (view != null) {
+            val recyclerView = requireView().findViewById<RecyclerView>(R.id.recycler_view)
+            recyclerView.adapter = TerminalAdapter(itemList)
+        }
+    }
+
     fun pushElement(text: String) {
         if (view != null) {
             val recyclerView = requireView().findViewById<RecyclerView>(R.id.recycler_view)

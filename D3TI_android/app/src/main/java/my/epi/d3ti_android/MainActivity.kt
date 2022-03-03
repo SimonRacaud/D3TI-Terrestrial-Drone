@@ -19,9 +19,11 @@ import java.lang.Math.cos
 import java.lang.Math.sin
 
 class MainActivity : AppCompatActivity() {
+    companion object {
+        private var terminalFragment: TerminalFragment = TerminalFragment()
+    }
     private lateinit var serverIp: String
     private lateinit var serverPort: String
-    private var terminalFragment: TerminalFragment = TerminalFragment()
     private var showTerminal: Boolean = false
     private lateinit var api: API
 
