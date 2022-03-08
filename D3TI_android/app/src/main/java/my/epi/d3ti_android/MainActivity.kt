@@ -8,19 +8,15 @@ import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.FragmentContainerView
 import io.github.controlwear.virtual.joystick.android.JoystickView
 import my.epi.d3ti_android.Activity.StartActivity
 import my.epi.d3ti_android.Fragment.TerminalFragment
-import my.epi.d3ti_android.Utils.ErrorMessage
 import my.epi.d3ti_android.web.API
 import my.epi.d3ti_android.web.VideoWebViewClient
-import java.lang.Math.cos
-import java.lang.Math.sin
 
 class MainActivity : AppCompatActivity() {
     companion object {
-        private var terminalFragment: TerminalFragment = TerminalFragment()
+        var terminalFragment: TerminalFragment = TerminalFragment()
     }
     private lateinit var serverIp: String
     private lateinit var serverPort: String
@@ -88,9 +84,11 @@ class MainActivity : AppCompatActivity() {
     private fun joysticksControl()
     {
         // Control main motors
-        val JOYSTICK_REFRESH_RATE = 500 // ms
+        val JOYSTICK_REFRESH_RATE = 200 // ms
 
         val joystickLeft = findViewById<View>(R.id.joystickViewLeft) as JoystickView
+        val joystickRight = findViewById<View>(R.id.joystickViewRight) as JoystickView
+        joystickRight.isAutoReCenterButton = false
         joystickLeft.setOnMoveListener({ angle, strength ->
             val radian: Double = 0.0174533 * angle.toDouble()
             var strengthDb: Double = strength.toDouble()
@@ -108,20 +106,31 @@ class MainActivity : AppCompatActivity() {
             this.api.postWheelMovement(throttleLeft, throttleRight)
         }, JOYSTICK_REFRESH_RATE)
         // Control turret servo motors
-        val joystickRight = findViewById<View>(R.id.joystickViewRight) as JoystickView
-        joystickRight.isAutoReCenterButton = false
+        var time: Long = 0
         joystickRight.setOnMoveListener( { angle, strength ->
-            var strengthDb: Double = strength.toDouble()
-            val radian: Double = 0.0174533 * angle.toDouble()
-            val x = kotlin.math.cos(radian) * (strengthDb / 100.0) // -1; 1
-            val y = kotlin.math.sin(radian) * (strengthDb / 100.0) // -1; 1
+            val now: Long = System.currentTimeMillis()
+            if ((now - time) > JOYSTICK_REFRESH_RATE) {
+                time = now
+                var strengthDb: Double = strength.toDouble()
+                val radian: Double = 0.0174533 * angle.toDouble()
+                val x = kotlin.math.cos(radian) * (strengthDb / 100.0) // -1; 1
+                val y = kotlin.math.sin(radian) * (strengthDb / 100.0) // -1; 1
 
-            val angleX = (x * 90 + 90).toInt() // (0 to 180)
-            val angleY = (y * 90 + 90).toInt() // (0 to 180)
+                val angleX = (x * 90 + 90).toInt() // (0 to 180)
+                val angleY = (y * 90 + 90).toInt() // (0 to 180)
 
-            terminalFragment.pushElement("Turret: X $angleX Y $angleY")
-            this.api.postTurretPosition(angleX, angleY)
-        }, JOYSTICK_REFRESH_RATE)
+                terminalFragment.pushElement("Turret: X $angleX Y $angleY")
+                this.api.postTurretPosition(angleX, angleY)
+            }
+        }, 10000)
+        val resetButton = findViewById<Button>(R.id.resetLeftJoystickButton)
+        resetButton.setOnClickListener {
+            val joystickRight = findViewById<JoystickView>(R.id.joystickViewRight)
+            joystickRight.resetButtonPosition()
+            joystickRight.setFixedCenter(true)
+            this.api.postTurretPosition(90, 90)
+            terminalFragment.pushElement("Turret: reset X 90 Y 90")
+        }
     }
 
     private fun configWebView()

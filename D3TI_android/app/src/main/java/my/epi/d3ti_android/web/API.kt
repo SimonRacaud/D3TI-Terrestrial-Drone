@@ -25,11 +25,10 @@ class API(
             Method.POST,
             "$url$endpoint",
             { response ->
-                println("API $endpoint ok: $response")
                 activity.setConnectionStatus(true)
             },
             { error ->
-                ErrorMessage.show(activity, "Network error $endpoint : ${error.message}")
+                MainActivity.terminalFragment.pushElement("Network error $endpoint : ${error.message}")
                 println("API $endpoint: An error occurred : $error")
                 activity.setConnectionStatus(false)
             }
@@ -60,11 +59,10 @@ class API(
             Request.Method.POST,
             "$url$endpoint",
             { response ->
-                println("API $endpoint ok: $response")
                 activity.setConnectionStatus(true)
             },
             { error ->
-                ErrorMessage.show(activity, "Network error: ${error.message}")
+                MainActivity.terminalFragment.pushElement("Network error $endpoint : ${error.message}")
                 println("API $endpoint: An error occurred : $error")
                 activity.setConnectionStatus(false)
             }

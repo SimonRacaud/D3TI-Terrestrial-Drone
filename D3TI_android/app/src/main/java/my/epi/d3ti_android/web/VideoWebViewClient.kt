@@ -21,7 +21,7 @@ internal class VideoWebViewClient(val context: MainActivity) : WebViewClient() {
 
         ErrorMessage.show(
             context,
-            error.toString()
+            "Fail to load the video stream"
         )
     }
 }

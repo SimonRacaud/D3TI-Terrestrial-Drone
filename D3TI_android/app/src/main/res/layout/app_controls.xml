@@ -6,39 +6,46 @@
 
     <Button
         android:id="@+id/alertButton"
-        android:layout_width="150dp"
+        android:layout_width="120dp"
         android:layout_height="60dp"
-        android:layout_marginBottom="20dp"
         android:text="ALERT"
+        android:layout_marginStart="20dp"
         app:layout_constraintBottom_toTopOf="@+id/joystickViewLeft"
-        app:layout_constraintEnd_toEndOf="@+id/joystickViewLeft"
         app:layout_constraintStart_toStartOf="@+id/joystickViewLeft" />
 
     <io.github.controlwear.virtual.joystick.android.JoystickView
         android:id="@+id/joystickViewLeft"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        app:JV_backgroundColor="#10000000"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        app:JV_backgroundColor="#05000000"
         app:JV_borderWidth="0dp"
         app:JV_buttonColor="#FF0000FF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/fireButton"
-        android:layout_width="150dp"
+        android:id="@+id/resetLeftJoystickButton"
+        android:layout_width="120dp"
         android:layout_height="60dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="5dp"
+        android:text="RESET"
+        app:layout_constraintBottom_toTopOf="@+id/fireButton"
+        app:layout_constraintEnd_toEndOf="@+id/fireButton" />
+
+    <Button
+        android:id="@+id/fireButton"
+        android:layout_width="120dp"
+        android:layout_height="60dp"
         android:text="FIRE"
+        android:layout_marginEnd="20dp"
         app:layout_constraintBottom_toTopOf="@+id/joystickViewRight"
-        app:layout_constraintEnd_toEndOf="@+id/joystickViewRight"
-        app:layout_constraintStart_toStartOf="@+id/joystickViewRight" />
+        app:layout_constraintEnd_toEndOf="@+id/joystickViewRight" />
 
     <io.github.controlwear.virtual.joystick.android.JoystickView
         android:id="@+id/joystickViewRight"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        app:JV_backgroundColor="#10000000"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        app:JV_backgroundColor="#05000000"
         app:JV_borderWidth="0dp"
         app:JV_buttonColor="#0000FF"
         app:layout_constraintBottom_toBottomOf="parent"
