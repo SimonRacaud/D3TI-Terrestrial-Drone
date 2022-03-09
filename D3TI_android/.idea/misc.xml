@@ -11,9 +11,10 @@
         <entry key="app/src/main/res/drawable/ic_baseline_refresh_24.xml" value="0.3745" />
         <entry key="app/src/main/res/drawable/ic_baseline_settings_24.xml" value="0.362" />
         <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.362" />
+        <entry key="app/src/main/res/layout-v21/activity_start.xml" value="0.3609375" />
         <entry key="app/src/main/res/layout-v21/fragment_header.xml" value="0.3609375" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.22" />
-        <entry key="app/src/main/res/layout/activity_start.xml" value="0.18046875" />
+        <entry key="app/src/main/res/layout/activity_start.xml" value="0.25" />
         <entry key="app/src/main/res/layout/app_controls.xml" value="0.18046875" />
         <entry key="app/src/main/res/layout/app_header.xml" value="0.25" />
         <entry key="app/src/main/res/layout/app_videoplayer.xml" value="0.18046875" />

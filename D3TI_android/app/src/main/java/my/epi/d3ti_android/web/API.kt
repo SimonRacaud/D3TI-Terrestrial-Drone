@@ -1,16 +1,15 @@
 package my.epi.d3ti_android.web;
 
+import android.app.Activity
 import com.android.volley.Request
 import com.android.volley.VolleyLog
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import my.epi.d3ti_android.MainActivity
-import my.epi.d3ti_android.Utils.ErrorMessage
 import java.io.UnsupportedEncodingException
 
-
 class API(
-    private val activity: MainActivity,
+    private val activity: Activity,
     val url: String
     ) {
     val queue = Volley.newRequestQueue(activity)
@@ -25,12 +24,12 @@ class API(
             Method.POST,
             "$url$endpoint",
             { response ->
-                activity.setConnectionStatus(true)
+                if (activity is MainActivity) activity.setConnectionStatus(true)
             },
             { error ->
                 MainActivity.terminalFragment.pushElement("Network error $endpoint : ${error.message}")
                 println("API $endpoint: An error occurred : $error")
-                activity.setConnectionStatus(false)
+                if (activity is MainActivity) activity.setConnectionStatus(false)
             }
         ) {
             override fun getBodyContentType(): String? {
@@ -59,16 +58,20 @@ class API(
             Request.Method.POST,
             "$url$endpoint",
             { response ->
-                activity.setConnectionStatus(true)
+                if (activity is MainActivity) activity.setConnectionStatus(true)
             },
             { error ->
                 MainActivity.terminalFragment.pushElement("Network error $endpoint : ${error.message}")
                 println("API $endpoint: An error occurred : $error")
-                activity.setConnectionStatus(false)
+                if (activity is MainActivity) activity.setConnectionStatus(false)
             }
         )
         request.tag = TAG
         queue.add(request)
+    }
+
+    fun postShutdown() {
+        this.sendPostRequest("/shutdown")
     }
 
     fun postTurretPosition(position1: Int, position2: Int) {

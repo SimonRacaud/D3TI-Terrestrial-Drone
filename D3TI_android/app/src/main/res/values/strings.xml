@@ -10,4 +10,5 @@
     <string name="def_server_ip">10.3.141.1</string>
     <string name="def_server_video_port">8081</string>
     <string name="def_server_api_port">8080</string>
+    <string name="button_shutdown">Shutdown</string>
 </resources>
