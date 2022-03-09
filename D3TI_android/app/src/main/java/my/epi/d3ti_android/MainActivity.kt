@@ -103,7 +103,7 @@ class MainActivity : AppCompatActivity() {
             val throttleRight: Int = (strengthDb * coefRight).toInt() // (-100 to 100)
 
             terminalFragment.pushElement("Motor: left $throttleLeft right $throttleRight")
-            this.api.postWheelMovement(throttleLeft, throttleRight)
+            this.api.postWheelMovement(throttleRight, throttleLeft)
         }, JOYSTICK_REFRESH_RATE)
         // Control turret servo motors
         var time: Long = 0
@@ -122,7 +122,7 @@ class MainActivity : AppCompatActivity() {
                 terminalFragment.pushElement("Turret: X $angleX Y $angleY")
                 this.api.postTurretPosition(angleX, angleY)
             }
-        }, 10000)
+        }, JOYSTICK_REFRESH_RATE)
         val resetButton = findViewById<Button>(R.id.resetLeftJoystickButton)
         resetButton.setOnClickListener {
             val joystickRight = findViewById<JoystickView>(R.id.joystickViewRight)
