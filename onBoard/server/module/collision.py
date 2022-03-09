@@ -2,8 +2,8 @@ import RPi.GPIO as GPIO
 import threading
 import time
 
-from data import Direction
-from module.motor import motor_set_movement, motor_get_movement
+from data import Collision, Direction
+from module.motor import MotorController
 
 ### CONFIG ###
 TRIG1 = 26
@@ -12,7 +12,7 @@ ECHO1 = 19
 TRIG2 = 16
 ECHO2 = 20
 
-CHECK_INTERVAL = 0.5  # second
+CHECK_INTERVAL = 0.1  # second
 
 MIN_DISTANCE = 10  # cm
 
@@ -52,8 +52,10 @@ class CollisionSystem(threading.Thread):
         while not self.stopped():
             if self._compute_distance(TRIG2, ECHO2) < MIN_DISTANCE:
                 self.callback(Direction.FORWARD)
-            if self._compute_distance(TRIG1, ECHO1) < MIN_DISTANCE:
+            elif self._compute_distance(TRIG1, ECHO1) < MIN_DISTANCE:
                 self.callback(Direction.BACKWARD)
+            else:
+                MotorController.setDirectionLock(Collision.NONE)
             time.sleep(CHECK_INTERVAL)
         self.event.set()
         print("Collision service stopped.")
@@ -70,6 +72,7 @@ class CollisionSystem(threading.Thread):
             if startTime - endTime > 5:
                 print(
                     "Warning: collision system GPIO ${echo} doesn't respond.")
+                return MIN_DISTANCE
         while GPIO.input(echo) == 1:
             endTime = time.time()
         distance = round((endTime - startTime) * 34000 / 2, 1)  # DEBUG
@@ -78,13 +81,14 @@ class CollisionSystem(threading.Thread):
 
 
 def callback_stop_motor(direction: Direction):
-    (throttle1, throttle2) = motor_get_movement()
-    if direction == Direction.BACKWARD and (throttle1 > 0 or throttle2 > 0):
+    print("collision: warning min distance detected ", direction)
+    (throttle1, throttle2) = MotorController.motor_get_movement()
+    if direction == Direction.BACKWARD and (throttle1 < 0 or throttle2 < 0):
         print("collision: stop backward movement")
-        motor_set_movement(0, 0)
-    elif direction == Direction.FORWARD and (throttle1 < 0 or throttle2 < 0):
+        MotorController.setDirectionLock(Collision.BACK)
+    elif direction == Direction.FORWARD and (throttle1 > 0 or throttle2 > 0):
         print("collision: stop forward movement")
-        motor_set_movement(0, 0)
+        MotorController.setDirectionLock(Collision.FRONT)
 
 
 def startCollisionSystem():

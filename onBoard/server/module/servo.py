@@ -15,6 +15,7 @@ def position_to_angle(position: int):
 
 
 def servo_set_position(position1: int, position2: int):
+    print("servo: set angle ", position1, position2)
     kit.servo[0].angle = position1
     #kit.continuous_servo[0].throttle = 0
     if position2 > 150:

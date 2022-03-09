@@ -3,9 +3,10 @@ from poplib import error_proto
 from fastapi import FastAPI, HTTPException
 import uvicorn
 import RPi.GPIO as GPIO
+import os
 
 from network.models import Position, Movement, Duration, ServiceStatus
-from module.motor import motor_set_movement
+from module.motor import MotorController
 from module.servo import servo_set_position
 from module.collision import startCollisionSystem, stopCollisionSystem
 from module.audio import buzzer_init, buzzer_play
@@ -83,7 +84,7 @@ async def turret_fire():
 @app.post("/wheel/movement")
 async def wheel_movement(body: Movement):
     try:
-        motor_set_movement(body.throttle1, body.throttle2)
+        MotorController.motor_set_movement(body.throttle1, body.throttle2)
     except ValueError as err:
         raise HTTPException(status_code=400, detail=err)
     except:
@@ -106,6 +107,13 @@ async def audio_buzzer():
 @app.put("/camera")
 async def service_camera(body: ServiceStatus):
     # apply TODO
+    return {}
+
+
+@app.post("/shutdown")
+async def shutdown_computer():
+    buzzer_play(BUZZER_TIME * 2)
+    os.system("sudo shutdown -h now")
     return {}
 
 
