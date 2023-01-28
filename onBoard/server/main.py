@@ -28,6 +28,7 @@ def shutdown_event():
 async def startup_event():
     startCollisionSystem()
     buzzer_init()
+    buzzer_play(BUZZER_TIME)
 
 ####
 # ENDPOINTS
